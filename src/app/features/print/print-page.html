@@ -22,7 +22,7 @@
               <thead><tr><th class="c-name">ชื่อ-สกุล</th><th class="c-id">เลขบัตรประชาชน</th><th class="c-dob">วัน/เดือน/ปีเกิด</th><th class="c-age">อายุ</th><th class="c-tel">เบอร์โทร</th></tr></thead>
               <tbody>
                 @for(person of store.householdMembers(house.id);track person.id){
-                  <tr><td class="c-name">{{ person.title }}{{ person.firstName }} {{ person.lastName }}</td><td class="c-id">{{ person.nationalId }}</td><td class="c-dob">{{ preferences.formatShortThaiDate(person.dateOfBirth) }}</td><td class="c-age">{{ preferences.ageOnToday(person.dateOfBirth) }}</td><td class="c-tel">{{ person.phone }}</td></tr>
+                  <tr><td class="c-name">{{ person.title }}{{ person.firstName }} {{ person.lastName }}</td><td class="c-id">{{ person.nationalId }}</td><td class="c-dob">{{ preferences.birthDisplay(person.dateOfBirth, person.birthYearOnly) }}</td><td class="c-age">{{ preferences.ageOnToday(person.dateOfBirth) }}</td><td class="c-tel">{{ person.phone }}</td></tr>
                 }
                 @empty { <tr><td colspan="5" class="c-empty">ยังไม่มีสมาชิกในครัวเรือนนี้</td></tr> }
               </tbody>

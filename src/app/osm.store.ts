@@ -15,6 +15,7 @@ export interface Member {
   lastName: string;
   nationalId: string;
   dateOfBirth: string;
+  birthYearOnly: boolean;
   gender: string;
   relationship: string;
   phone: string;
@@ -25,7 +26,7 @@ export interface Member {
 interface HouseholdRow { id: string; house_number: string; household_code: string; }
 interface MemberRow {
   id: string; household_id: string; title: string; first_name: string; last_name: string;
-  national_id: string; date_of_birth: string | null; gender: string; relationship: string;
+  national_id: string; date_of_birth: string | null; birth_year_only: boolean | null; gender: string; relationship: string;
   phone: string; occupation: string; note: string;
 }
 
@@ -69,7 +70,7 @@ export class OSMStore {
     return {
       id: row.id, householdId: row.household_id, title: row.title ?? '',
       firstName: row.first_name, lastName: row.last_name, nationalId: row.national_id ?? '',
-      dateOfBirth: row.date_of_birth ?? '', gender: row.gender ?? '', relationship: row.relationship ?? '',
+      dateOfBirth: row.date_of_birth ?? '', birthYearOnly: row.birth_year_only ?? false, gender: row.gender ?? '', relationship: row.relationship ?? '',
       phone: row.phone ?? '', occupation: row.occupation ?? '', note: row.note ?? '',
     };
   }
@@ -80,7 +81,7 @@ export class OSMStore {
     return {
       household_id: value.householdId, title: value.title, first_name: value.firstName,
       last_name: value.lastName, national_id: value.nationalId,
-      date_of_birth: value.dateOfBirth || null, gender: value.gender, relationship: value.relationship,
+      date_of_birth: value.dateOfBirth || null, birth_year_only: value.birthYearOnly ?? false, gender: value.gender, relationship: value.relationship,
       phone: value.phone, occupation: value.occupation, note: value.note,
     };
   }
@@ -115,18 +116,18 @@ export class OSMStore {
     if (error) { this.fail('สร้างข้อมูลตั้งต้นไม่สำเร็จ', error.message); return null; }
     const rows = data as HouseholdRow[];
     const seedMembers: { houseKey: string; member: Omit<Member, 'id' | 'householdId'> }[] = [
-      { houseKey: 'ชุมชน-001', member: { title: 'นาง', firstName: 'สมใจ', lastName: 'ใจดี', nationalId: '', dateOfBirth: '1965-06-14', gender: 'หญิง', relationship: 'เจ้าบ้าน', phone: '08X-XXX-1201', occupation: '', note: '' } },
-      { houseKey: 'ชุมชน-001', member: { title: 'นาย', firstName: 'สมชาย', lastName: 'ใจดี', nationalId: '', dateOfBirth: '1962-02-20', gender: 'ชาย', relationship: 'คู่สมรส', phone: '', occupation: '', note: '' } },
-      { houseKey: 'ชุมชน-002', member: { title: 'นางสาว', firstName: 'มาลี', lastName: 'แสงทอง', nationalId: '', dateOfBirth: '1988-11-03', gender: 'หญิง', relationship: 'เจ้าบ้าน', phone: '08X-XXX-2402', occupation: '', note: '' } },
-      { houseKey: 'ชุมชน-003', member: { title: 'นาย', firstName: 'ประเสริฐ', lastName: 'มั่นคง', nationalId: '', dateOfBirth: '1954-08-29', gender: 'ชาย', relationship: 'เจ้าบ้าน', phone: '', occupation: '', note: '' } },
-      { houseKey: 'ชุมชน-004', member: { title: 'นาง', firstName: 'ดวงใจ', lastName: 'พูนสุข', nationalId: '', dateOfBirth: '1971-03-12', gender: 'หญิง', relationship: 'เจ้าบ้าน', phone: '08X-XXX-4204', occupation: '', note: '' } },
-      { houseKey: 'ชุมชน-004', member: { title: 'เด็กชาย', firstName: 'ต้นกล้า', lastName: 'พูนสุข', nationalId: '', dateOfBirth: '2012-09-10', gender: 'ชาย', relationship: 'บุตร', phone: '', occupation: '', note: '' } },
-      { houseKey: 'ชุมชน-005', member: { title: 'นาย', firstName: 'วิชัย', lastName: 'คำแสน', nationalId: '', dateOfBirth: '1980-01-26', gender: 'ชาย', relationship: 'เจ้าบ้าน', phone: '', occupation: '', note: '' } },
-      { houseKey: 'ชุมชน-006', member: { title: 'นาง', firstName: 'อารีย์', lastName: 'สุขใจ', nationalId: '', dateOfBirth: '1959-05-08', gender: 'หญิง', relationship: 'เจ้าบ้าน', phone: '08X-XXX-6606', occupation: '', note: '' } },
-      { houseKey: 'ชุมชน-007', member: { title: 'นาย', firstName: 'ธนา', lastName: 'บุญมี', nationalId: '', dateOfBirth: '1992-07-17', gender: 'ชาย', relationship: 'เจ้าบ้าน', phone: '', occupation: '', note: '' } },
-      { houseKey: 'ชุมชน-008', member: { title: 'นางสาว', firstName: 'พิมพ์ใจ', lastName: 'วงศ์คำ', nationalId: '', dateOfBirth: '1985-12-01', gender: 'หญิง', relationship: 'เจ้าบ้าน', phone: '08X-XXX-8808', occupation: '', note: '' } },
-      { houseKey: 'ชุมชน-009', member: { title: 'นาย', firstName: 'บุญส่ง', lastName: 'มีสุข', nationalId: '', dateOfBirth: '1948-04-21', gender: 'ชาย', relationship: 'เจ้าบ้าน', phone: '', occupation: '', note: '' } },
-      { houseKey: 'ชุมชน-010', member: { title: 'นาง', firstName: 'สายฝน', lastName: 'แสนดี', nationalId: '', dateOfBirth: '1978-10-09', gender: 'หญิง', relationship: 'เจ้าบ้าน', phone: '08X-XXX-1010', occupation: '', note: '' } },
+      { houseKey: 'ชุมชน-001', member: { title: 'นาง', firstName: 'สมใจ', lastName: 'ใจดี', nationalId: '', dateOfBirth: '1965-06-14', birthYearOnly: false, gender: 'หญิง', relationship: 'เจ้าบ้าน', phone: '08X-XXX-1201', occupation: '', note: '' } },
+      { houseKey: 'ชุมชน-001', member: { title: 'นาย', firstName: 'สมชาย', lastName: 'ใจดี', nationalId: '', dateOfBirth: '1962-02-20', birthYearOnly: false, gender: 'ชาย', relationship: 'คู่สมรส', phone: '', occupation: '', note: '' } },
+      { houseKey: 'ชุมชน-002', member: { title: 'นางสาว', firstName: 'มาลี', lastName: 'แสงทอง', nationalId: '', dateOfBirth: '1988-11-03', birthYearOnly: false, gender: 'หญิง', relationship: 'เจ้าบ้าน', phone: '08X-XXX-2402', occupation: '', note: '' } },
+      { houseKey: 'ชุมชน-003', member: { title: 'นาย', firstName: 'ประเสริฐ', lastName: 'มั่นคง', nationalId: '', dateOfBirth: '1954-08-29', birthYearOnly: false, gender: 'ชาย', relationship: 'เจ้าบ้าน', phone: '', occupation: '', note: '' } },
+      { houseKey: 'ชุมชน-004', member: { title: 'นาง', firstName: 'ดวงใจ', lastName: 'พูนสุข', nationalId: '', dateOfBirth: '1971-03-12', birthYearOnly: false, gender: 'หญิง', relationship: 'เจ้าบ้าน', phone: '08X-XXX-4204', occupation: '', note: '' } },
+      { houseKey: 'ชุมชน-004', member: { title: 'เด็กชาย', firstName: 'ต้นกล้า', lastName: 'พูนสุข', nationalId: '', dateOfBirth: '2012-09-10', birthYearOnly: false, gender: 'ชาย', relationship: 'บุตร', phone: '', occupation: '', note: '' } },
+      { houseKey: 'ชุมชน-005', member: { title: 'นาย', firstName: 'วิชัย', lastName: 'คำแสน', nationalId: '', dateOfBirth: '1980-01-26', birthYearOnly: false, gender: 'ชาย', relationship: 'เจ้าบ้าน', phone: '', occupation: '', note: '' } },
+      { houseKey: 'ชุมชน-006', member: { title: 'นาง', firstName: 'อารีย์', lastName: 'สุขใจ', nationalId: '', dateOfBirth: '1959-05-08', birthYearOnly: false, gender: 'หญิง', relationship: 'เจ้าบ้าน', phone: '08X-XXX-6606', occupation: '', note: '' } },
+      { houseKey: 'ชุมชน-007', member: { title: 'นาย', firstName: 'ธนา', lastName: 'บุญมี', nationalId: '', dateOfBirth: '1992-07-17', birthYearOnly: false, gender: 'ชาย', relationship: 'เจ้าบ้าน', phone: '', occupation: '', note: '' } },
+      { houseKey: 'ชุมชน-008', member: { title: 'นางสาว', firstName: 'พิมพ์ใจ', lastName: 'วงศ์คำ', nationalId: '', dateOfBirth: '1985-12-01', birthYearOnly: false, gender: 'หญิง', relationship: 'เจ้าบ้าน', phone: '08X-XXX-8808', occupation: '', note: '' } },
+      { houseKey: 'ชุมชน-009', member: { title: 'นาย', firstName: 'บุญส่ง', lastName: 'มีสุข', nationalId: '', dateOfBirth: '1948-04-21', birthYearOnly: false, gender: 'ชาย', relationship: 'เจ้าบ้าน', phone: '', occupation: '', note: '' } },
+      { houseKey: 'ชุมชน-010', member: { title: 'นาง', firstName: 'สายฝน', lastName: 'แสนดี', nationalId: '', dateOfBirth: '1978-10-09', birthYearOnly: false, gender: 'หญิง', relationship: 'เจ้าบ้าน', phone: '08X-XXX-1010', occupation: '', note: '' } },
     ];
     const memberRows = seedMembers
       .map((s) => ({ ...this.toMemberRow({ ...s.member, householdId: rows.find((h) => h.household_code === s.houseKey)?.id ?? '' }) }))
@@ -189,4 +190,5 @@ export class OSMStore {
     this.members.update((items) => items.filter((item) => item.id !== id));
   }
 }
+
 

@@ -32,6 +32,12 @@ export class PreferencesStore {
     return `${date.getDate()}/${months[date.getMonth()]}/${date.getFullYear() + 543}`;
   }
 
+  birthDisplay(value: string, yearOnly: boolean): string {
+    if (!value) return '—';
+    if (yearOnly) return 'พ.ศ. ' + (Number(value.slice(0, 4)) + 543);
+    return this.formatShortThaiDate(value);
+  }
+
   ageOnToday(value: string): string {
     if (!value) return '';
     const birth = new Date(value);

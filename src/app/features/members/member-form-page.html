@@ -8,11 +8,18 @@
         <label class="field"><span>คำนำหน้า</span><select formControlName="title"><option value="">เลือกคำนำหน้า</option><option>นาย</option><option>นาง</option><option>นางสาว</option><option>เด็กชาย</option><option>เด็กหญิง</option></select></label>
         <label class="field"><span>ชื่อ <b>(จำเป็น)</b></span><input formControlName="firstName" required placeholder="ชื่อจริง">@if(showError('firstName')){<small class="field-error">กรุณากรอกชื่อสมาชิก</small>}</label>
         <label class="field"><span>นามสกุล <b>(จำเป็น)</b></span><input formControlName="lastName" required placeholder="นามสกุล">@if(showError('lastName')){<small class="field-error">กรุณากรอกนามสกุลสมาชิก</small>}</label>
-        <label class="field"><span>วัน/เดือน/ปีเกิด</span><input type="date" formControlName="dateOfBirth"></label>
+      </div>
+      <label class="settings-control year-only-toggle"><span><strong>ไม่รู้วันเกิดแน่ชัด รู้แค่ปีเกิด</strong><small>เลือกเมื่อคนแก่จำวันที่ไม่ได้ ใส่แค่ปีเกิด (พ.ศ.) แทนได้</small></span><button class="toggle" [class.toggle-on]="form.controls.birthYearOnly.value" role="switch" [attr.aria-checked]="form.controls.birthYearOnly.value" aria-label="ไม่รู้วันเกิดแน่ชัด รู้แค่ปีเกิด" (click)="toggleYearOnly()"><span></span></button></label>
+      <div class="form-grid three-col">
+        @if (form.controls.birthYearOnly.value) {
+          <label class="field"><span>ปีเกิด (พ.ศ.)</span><input formControlName="birthYearBE" inputmode="numeric" maxlength="4" placeholder="เช่น 2508">@if(showError('birthYearBE')){<small class="field-error">กรอกปีเกิด 4 หลัก เช่น 2508</small>}</label>
+        } @else {
+          <label class="field"><span>วัน/เดือน/ปีเกิด</span><input type="date" formControlName="dateOfBirth"></label>
+        }
         <label class="field"><span>เลขบัตรประชาชน</span><input formControlName="nationalId" inputmode="numeric" maxlength="13" placeholder="13 หลัก"></label>
         <label class="field"><span>เบอร์โทรศัพท์</span><input formControlName="phone" inputmode="tel" placeholder="0XX-XXX-XXXX"></label>
       </div>
-      <p class="print-doc-hint">อายุจะคำนวณให้อัตโนมัติจากวัน/เดือน/ปีเกิด</p>
+      <p class="print-doc-hint">@if (form.controls.birthYearOnly.value) {อายุจะคำนวณจากปีเกิด (พ.ศ.) โดยประมาณ} @else {อายุจะคำนวณให้อัตโนมัติจากวัน/เดือน/ปีเกิด}</p>
       @if(saveFailed()){<p class="field-error save-error" role="alert">บันทึกไม่สำเร็จ ตรวจว่าเน็ตเปิดอยู่แล้วลองกดบันทึกอีกครั้ง</p>}
       <div class="form-footer"><a class="button button-plain" [routerLink]="editing && memberId ? ['/households', house.id, 'members', memberId] : ['/households', house.id]">ยกเลิก ไม่บันทึก</a><button class="button button-primary" type="submit">บันทึกข้อมูล</button></div>
     </form>
