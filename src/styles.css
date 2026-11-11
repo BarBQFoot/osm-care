@@ -361,7 +361,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .login-brand { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 20px; }
 .login-brand strong { color: #22301f; font-size: 19px; }
 .login-brand small { display: block; color: #6d7a6e; font-size: 12px; }
-.login-mark { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 13px; background: #12753c; color: #fff; font-size: 22px; font-weight: 700; }
+.login-mark { display: block; flex: none; width: 48px; height: 48px; border-radius: 14px; object-fit: cover; }
 .login-card h1 { margin: 0 0 6px; color: #22301f; font-size: 21px; }
 .login-hint { margin: 0 0 18px; color: #6d7a6e; font-size: 14px; }
 .login-input { width: 100%; height: 56px; padding: 0 16px; border: 2px solid #dbe4da; border-radius: 13px; background: #fff; color: #22301f; font-size: 20px; text-align: center; letter-spacing: 4px; }

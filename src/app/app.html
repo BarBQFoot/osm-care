@@ -1,13 +1,13 @@
 <a class="skip-link" href="#main-content">ข้ามไปเนื้อหาหลัก</a>
 @if (!auth.ready()) {
-  <div class="boot-screen"><span class="login-mark">ม</span>กำลังเปิดสมุดบันทึก…</div>
+  <div class="boot-screen"><img class="login-mark" src="icons/my-osm-mark.svg" alt="">กำลังเปิดสมุดบันทึก…</div>
 } @else if (!auth.user()) {
   <app-login-page />
 } @else {
 <div class="app-frame">
   <aside class="sidebar">
     <a routerLink="/dashboard" class="brand">
-      <span class="brand-mark">ม</span>
+      <img class="brand-mark" src="icons/my-osm-mark.svg" alt="">
       <span><strong>My OSM</strong><small>สมุดบันทึก อสม.</small></span>
     </a>
     <div class="nav-caption">เมนูหลัก</div>
@@ -30,7 +30,7 @@
 
   <main class="main-area">
     <header class="topbar">
-      <span class="topbar-brand"><span class="topbar-mark" aria-hidden="true">ม</span><strong>My OSM</strong></span>
+      <span class="topbar-brand"><img class="topbar-mark" src="icons/my-osm-mark.svg" alt=""><strong>My OSM</strong></span>
       <span class="today-label">{{ preferences.formatToday() }}</span>
       <span class="top-avatar" aria-hidden="true">อ</span>
     </header>
