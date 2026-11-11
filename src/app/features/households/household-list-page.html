@@ -1,0 +1,13 @@
+<section class="page-wrap">
+  <div class="page-title-row"><div><div class="eyebrow">สมุดบันทึกชุมชน</div><h1>ครัวเรือน</h1><p class="page-subtitle">จัดการข้อมูลครัวเรือนและสมาชิกในพื้นที่รับผิดชอบ</p></div><a class="button button-primary" routerLink="/households/new"><span>＋</span> เพิ่มครัวเรือน</a></div>
+  <div class="list-toolbar"><label class="search-box"><span aria-hidden="true">⌕</span><input aria-label="ค้นหาครัวเรือน" placeholder="พิมพ์บ้านเลขที่ เช่น 12/1 หรือรหัสประจำบ้าน" [value]="query()" (input)="query.set($any($event.target).value)">@if(query()){<button class="clear-search" (click)="query.set('')">ล้างคำค้น</button>}</label><span class="result-count">ทั้งหมด <strong>{{ filtered().length }}</strong> ครัวเรือน</span></div>
+  <p class="search-hint">พิมพ์บ้านเลขที่หรือรหัสประจำบ้านเพื่อค้นหา แล้วแตะรายการเพื่อเปิดดูสมาชิก</p>
+  <div class="panel table-panel">
+    <div class="desktop-table"><table><thead><tr><th>บ้านเลขที่</th><th>รหัสประจำบ้าน</th><th>สมาชิก</th><th class="align-right">การจัดการ</th></tr></thead><tbody>
+      @for (house of filtered(); track house.id) {<tr><td><a class="house-cell" [routerLink]="['/households', house.id]"><span class="table-house-icon">⌂</span><strong>{{ house.houseNumber }}</strong></a></td><td><span class="code-pill">{{ house.householdCode }}</span></td><td>{{ store.householdMembers(house.id).length }} <span class="muted">คน</span></td><td class="align-right"><a class="row-action" [routerLink]="['/households', house.id]">ดูรายละเอียด <span>→</span></a></td></tr>}
+    </tbody></table></div>
+    <div class="mobile-house-list">@for (house of filtered(); track house.id) {<a class="mobile-house-card" [routerLink]="['/households', house.id]"><div class="table-house-icon">⌂</div><div class="mobile-house-info"><strong>บ้านเลขที่ {{ house.houseNumber }}</strong><small>{{ house.householdCode }} · {{ store.householdMembers(house.id).length }} สมาชิก</small></div><span class="row-chevron">›</span></a>}</div>
+    @if(filtered().length === 0){<div class="empty-state"><span class="empty-icon">⌕</span><h3>ไม่พบครัวเรือน</h3><p>ลองค้นหาด้วยบ้านเลขที่หรือรหัสประจำบ้านอื่น</p><button class="button button-secondary" (click)="query.set('')">ล้างคำค้น</button></div>}
+  </div>
+  <div class="prototype-note"><span>ⓘ</span> รายการนี้ใช้ข้อมูลตัวอย่างและเก็บไว้ในหน่วยความจำของหน้านี้</div>
+</section>

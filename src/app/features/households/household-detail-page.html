@@ -1,0 +1,14 @@
+@if (household(); as house) {
+  <section class="page-wrap">
+    <a class="button button-secondary back-top" routerLink="/households">← กลับไปหน้าครัวเรือน</a>
+    @if (justSaved) { <div class="save-banner" role="status" aria-live="polite"><span>✓</span> บันทึกข้อมูลแล้ว</div> }
+    <div class="breadcrumb"><a routerLink="/households">ครัวเรือน</a><span>›</span><span>บ้านเลขที่ {{ house.houseNumber }}</span></div>
+    <div class="page-title-row detail-title"><div><div class="eyebrow">รายละเอียดครัวเรือน</div><h1>บ้านเลขที่ {{ house.houseNumber }}</h1><p class="page-subtitle">ข้อมูลครัวเรือนและสมาชิกที่อาศัยอยู่</p></div><div class="title-actions"><a class="button button-secondary" [routerLink]="['/households', house.id, 'edit']">แก้ไขข้อมูล</a><button class="button button-danger-soft" (click)="askRemoveHouse(house)">ลบครัวเรือน</button></div></div>
+    <div class="detail-summary panel"><div class="summary-house-icon">⌂</div><div><span class="field-caption">รหัสประจำบ้าน</span><strong class="summary-code">{{ house.householdCode }}</strong></div><div class="summary-divider"></div><div><span class="field-caption">จำนวนสมาชิก</span><strong class="summary-code">{{ members().length }} <small>คน</small></strong></div></div>
+    <div class="section-heading members-heading"><div><div class="eyebrow">สมาชิกในบ้าน</div><h2>รายชื่อสมาชิก <span class="count-badge">{{ members().length }}</span></h2></div><a class="button button-primary" [routerLink]="['/households', house.id, 'members', 'new']"><span>＋</span> เพิ่มสมาชิก</a></div>
+    <div class="panel member-list">@for(member of members(); track member.id){<a class="member-row" [routerLink]="['/households', house.id, 'members', member.id]"><span class="member-avatar" [class.avatar-warm]="member.gender === 'หญิง'">{{ member.firstName.slice(0,1) }}</span><span class="member-row-info"><strong>{{ member.title }}{{ member.firstName }} {{ member.lastName }}</strong><small>{{ member.dateOfBirth ? preferences.ageOnToday(member.dateOfBirth) + ' ปี' : 'ไม่ระบุอายุ' }} · {{ member.phone || 'ไม่มีเบอร์โทร' }}</small></span><span class="row-chevron">›</span></a>}@if(members().length===0){<div class="empty-state"><span class="empty-icon">♙</span><h3>ยังไม่มีสมาชิก</h3><p>เพิ่มสมาชิกเพื่อบันทึกข้อมูลในครัวเรือนนี้</p></div>}</div>
+  </section>
+} @else { <app-not-found-inline /> }
+@if (deleteDialog(); as dialog) {
+  <app-confirm-dialog [data]="dialog" (confirmed)="confirmDelete()" (cancelled)="cancelDelete()" />
+}

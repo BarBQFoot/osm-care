@@ -1,0 +1,23 @@
+<section class="page-wrap">
+  <div class="welcome-banner">
+    <div><div class="eyebrow light">{{ preferences.formatToday() }}</div><h1>สวัสดีค่ะ {{ preferences.displayName() }} <span>👋</span></h1><p>สมุดบันทึกข้อมูลชุมชนของคุณ</p></div>
+    <div class="banner-art" aria-hidden="true"><span>⌂</span><i>✳</i></div>
+  </div>
+  <div class="section-heading"><div><div class="eyebrow">ภาพรวมพื้นที่</div><h2>ข้อมูลชุมชนของคุณ</h2></div><a class="text-link" routerLink="/households">ดูครัวเรือนทั้งหมด <span>→</span></a></div>
+  <div class="stats-grid">
+    <article class="stat-card"><div class="stat-icon green">⌂</div><div class="stat-label">ครัวเรือนทั้งหมด</div><div class="stat-value">{{ store.households().length }} <small>ครัวเรือน</small></div><div class="stat-foot"><span class="status-dot"></span> ในพื้นที่รับผิดชอบ</div></article>
+    <article class="stat-card"><div class="stat-icon amber">♙</div><div class="stat-label">สมาชิกทั้งหมด</div><div class="stat-value">{{ store.members().length }} <small>คน</small></div><div class="stat-foot">ข้อมูลสมาชิกในชุมชน</div></article>
+    <article class="stat-card"><div class="stat-icon blue">✓</div><div class="stat-label">ครัวเรือนในรายการ</div><div class="stat-value">{{ store.households().length }} <small>รายการ</small></div><div class="stat-foot">ในสมุดบันทึกของคุณ</div></article>
+  </div>
+  <div class="dashboard-grid">
+    <section class="panel recent-panel"><div class="panel-head"><div><h3>ครัวเรือนล่าสุด</h3><p>รายการในพื้นที่ที่คุณรับผิดชอบ</p></div><a class="small-link" routerLink="/households">ดูทั้งหมด <span>→</span></a></div>
+      <div class="recent-list">@for (house of store.households().slice(0, 5); track house.id) {<a class="recent-row" [routerLink]="['/households', house.id]"><span class="house-icon">⌂</span><span class="recent-info"><strong>บ้านเลขที่ {{ house.houseNumber }}</strong><small>{{ house.householdCode }}</small></span><span class="member-count">{{ store.householdMembers(house.id).length }} คน</span><span class="row-chevron">›</span></a>}</div>
+    </section>
+    <section class="panel quick-panel"><div class="panel-head"><div><h3>ทางลัด</h3><p>เริ่มทำรายการได้ทันที</p></div><span class="sparkle">✳</span></div>
+      <a class="quick-action" routerLink="/households/new"><span class="quick-icon green">＋</span><span><strong>เพิ่มครัวเรือน</strong><small>บันทึกบ้านใหม่ในพื้นที่</small></span><span class="row-chevron">›</span></a>
+      <a class="quick-action" routerLink="/print"><span class="quick-icon violet">▤</span><span><strong>พิมพ์เอกสาร</strong><small>จัดเตรียมรายการสำหรับพิมพ์</small></span><span class="row-chevron">›</span></a>
+      <div class="help-note"><span>✦</span><p>ข้อมูลครัวเรือนและสมาชิกแยกกันเพื่อให้ง่ายต่อการดูแล</p></div>
+    </section>
+  </div>
+  <div class="prototype-note"><span>ⓘ</span> ข้อมูลตัวอย่างสำหรับแสดงหน้าจอเท่านั้น และจะหายเมื่อรีเฟรชหน้า</div>
+</section>

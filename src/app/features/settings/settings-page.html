@@ -1,0 +1,18 @@
+<section class="page-wrap">
+  <div class="page-title-row"><div><div class="eyebrow">ปรับแต่งการใช้งาน</div><h1>ตั้งค่า</h1><p class="page-subtitle">จัดการการแสดงผลและข้อมูลหัวเอกสารพิมพ์</p></div></div>
+  <div class="settings-stack">
+    <section class="panel settings-card"><div class="form-section-heading"><span class="section-icon profile-icon">♙</span><div><h2>ข้อมูลผู้ดูแล</h2><p>ชื่อนี้จะแสดงในหน้าหลักและหัวเอกสารพิมพ์</p></div></div><label class="field settings-name"><span>ชื่อผู้ดูแล (อสม.)</span><input [value]="preferences.displayName()" (input)="preferences.setDisplayName($any($event.target).value)" placeholder="เช่น นางสมใจ ใจดี"></label></section>
+    <section class="panel settings-card"><div class="form-section-heading"><span class="section-icon print-icon">▤</span><div><h2>ข้อมูลเอกสารพิมพ์</h2><p>ใช้เป็นหัวเอกสาร “สมาชิกครัวเรือนที่นับตัวอยู่บ้าน”</p></div></div>
+      <div class="form-grid three-col settings-grid">
+        <label class="field"><span>หมู่ที่</span><input [value]="preferences.villageNo()" (input)="preferences.setVillageNo($any($event.target).value)" placeholder="เช่น 3"></label>
+        <label class="field"><span>ตำบล</span><input [value]="preferences.subDistrict()" (input)="preferences.setSubDistrict($any($event.target).value)" placeholder="เช่น เกาะขาม"></label>
+        <label class="field"><span>อำเภอ</span><input [value]="preferences.district()" (input)="preferences.setDistrict($any($event.target).value)" placeholder="เช่น เมือง"></label>
+        <label class="field"><span>จังหวัด</span><input [value]="preferences.province()" (input)="preferences.setProvince($any($event.target).value)" placeholder="เช่น ขอนแก่น"></label>
+        <label class="field"><span>ประจำปี (พ.ศ.)</span><input [value]="preferences.censusYear()" (input)="preferences.setCensusYear($any($event.target).value)" inputmode="numeric" placeholder="เช่น 2569"></label>
+      </div>
+    </section>
+    <section class="panel settings-card"><div class="form-section-heading"><span class="section-icon">◷</span><div><h2>รูปแบบวันที่</h2><p>เลือกวิธีแสดงวันที่ในหน้าจอ</p></div></div><label class="settings-control"><span><strong>แสดงปี พ.ศ.</strong><small>ใช้รูปแบบวันที่ตามที่คุ้นเคยในประเทศไทย</small></span><button class="toggle" [class.toggle-on]="preferences.buddhistYear()" role="switch" [attr.aria-checked]="preferences.buddhistYear()" aria-label="แสดงปี พ.ศ." (click)="preferences.buddhistYear.set(!preferences.buddhistYear())"><span></span></button></label></section>
+    <div class="settings-note"><span>ⓘ</span> ค่าตั้งค่ามีผลในหน้าจอนี้ และรีเซ็ตเมื่อรีเฟรช</div>
+    <section class="panel settings-card"><div class="form-section-heading"><span class="section-icon">⇥</span><div><h2>บัญชีผู้ใช้</h2><p>ออกจากระบบเมื่อปล่อยเครื่องไว้กับคนอื่น</p></div></div><button class="button button-danger-soft logout-button" type="button" (click)="logout()">ออกจากระบบ</button></section>
+  </div>
+</section>

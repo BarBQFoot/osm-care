@@ -1,0 +1,11 @@
+<section class="page-wrap form-page">
+  <div class="breadcrumb"><a routerLink="/households">ครัวเรือน</a><span>›</span><span>{{ editing ? 'แก้ไขครัวเรือน' : 'เพิ่มครัวเรือน' }}</span></div>
+  <div class="page-title-row"><div><div class="eyebrow">ข้อมูลครัวเรือน</div><h1>{{ editing ? 'แก้ไขครัวเรือน' : 'เพิ่มครัวเรือน' }}</h1><p class="page-subtitle">กรอกข้อมูลพื้นฐานของบ้านในพื้นที่รับผิดชอบ</p></div></div>
+  <form class="panel form-card" #formEl [formGroup]="form" (ngSubmit)="save()">
+    <div class="form-section-heading"><span class="section-icon">⌂</span><div><h2>ข้อมูลครัวเรือน</h2><p>ข้อมูลบ้านจะแยกจากข้อมูลสมาชิก</p></div></div>
+    <div class="form-grid"><label class="field"><span>บ้านเลขที่ <b>(จำเป็น)</b></span><input formControlName="houseNumber" required placeholder="เช่น 12/1" autocomplete="off">@if(showError('houseNumber')){<small class="field-error">กรุณากรอกบ้านเลขที่ เช่น 12/1</small>}</label><label class="field"><span>รหัสประจำบ้าน <b>(จำเป็น)</b></span><input formControlName="householdCode" required placeholder="เช่น ชุมชน-001" autocomplete="off">@if(showError('householdCode')){<small class="field-error">กรุณากรอกรหัสครัวเรือน เช่น ชุมชน-001</small>}</label></div>
+    @if(saveFailed()){<p class="field-error save-error" role="alert">บันทึกไม่สำเร็จ ตรวจว่าเน็ตเปิดอยู่แล้วลองกดบันทึกอีกครั้ง</p>}
+<div class="form-footer"><a class="button button-plain" [routerLink]="editing && id ? ['/households', id] : ['/households']">ยกเลิก ไม่บันทึก</a><button class="button button-primary" type="submit">บันทึกข้อมูล</button></div>
+  </form>
+  <div class="form-tip"><span>ⓘ</span> สามารถเพิ่มสมาชิกได้หลังบันทึกครัวเรือน</div>
+</section>

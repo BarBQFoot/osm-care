@@ -1,0 +1,35 @@
+<section class="page-wrap">
+  <div class="page-title-row"><div><div class="eyebrow">เอกสารสำหรับชุมชน</div><h1>พิมพ์เอกสาร</h1><p class="page-subtitle">จัดเตรียมแบบฟอร์มสมาชิกครัวเรือนในรูปแบบกระดาษ A4</p></div><a class="button button-secondary" routerLink="/dashboard">← กลับหน้าหลัก</a></div>
+  <div class="print-layout">
+    <section class="panel print-options"><div class="form-section-heading"><span class="section-icon print-icon">▤</span><div><h2>เลือกรายการ</h2><p>เลือกข้อมูลที่ต้องการแสดงในเอกสาร</p></div></div>
+      <label class="field"><span>ขอบเขตข้อมูล</span><select [value]="selected()" (change)="selected.set($any($event.target).value)"><option value="all">ครัวเรือนทั้งหมด ({{store.households().length}} ครัวเรือน)</option>@for(house of store.households();track house.id){<option [value]="house.id">บ้านเลขที่ {{house.houseNumber}} · {{house.householdCode}}</option>}</select></label>
+      <div class="print-option-card"><span class="check-mark">✓</span><div><strong>ตารางสมาชิกครัวเรือน</strong><small>ชื่อ-สกุล เลขบัตรประชาชน วันเกิด อายุ เบอร์โทร</small></div></div>
+      <p class="print-doc-hint">หัวเอกสารใช้ข้อมูลพื้นที่จากหน้า “ตั้งค่า” (หมู่ ตำบล อำเภอ จังหวัด ประจำปี และชื่อผู้ดูแล) — เรียงบ้านเลขที่จากน้อยไปมากอัตโนมัติ</p>
+      <button class="button button-primary print-button" (click)="print()">▤ <span>พิมพ์เอกสาร A4</span></button>
+      <button class="button button-secondary print-button" (click)="savePdf()">⬇ <span>บันทึกเป็น PDF</span></button>
+      <p class="print-hint">พิมพ์: ตั้งค่ากระดาษ A4 แนวตั้ง · บันทึก PDF: ในหน้าต่างพิมพ์เลือกปลายทาง “บันทึกเป็น PDF” แล้วกด บันทึก — การพิมพ์ไม่เปลี่ยนแปลงข้อมูล</p>
+    </section>
+    <section class="panel preview-panel"><div class="preview-head"><div><span class="eyebrow">ตัวอย่างเอกสาร</span><strong>กระดาษ A4</strong></div><span class="paper-badge">A4</span></div>
+      <div class="paper-preview census-doc">
+        <h3 class="doc-title">สมาชิกครัวเรือนที่รับผิดชอบ</h3>
+        <p class="doc-line">จำนวน {{ printHouseholds().length }} ครัวเรือน หมู่ที่ {{ preferences.villageNo() }} ต.{{ preferences.subDistrict() }} อ.{{ preferences.district() }} จ.{{ preferences.province() }}</p>
+        <p class="doc-line doc-line-year">ประจำปี {{ preferences.censusYear() }}</p>
+        <p class="doc-name">ของ {{ preferences.displayName() }}</p>
+        @for(house of printHouseholds();track house.id){
+          <div class="doc-house-block">
+            <div class="doc-house-label">บ้านเลขที่ {{ house.houseNumber }} <span>รหัสประจำบ้าน {{ house.householdCode }}</span></div>
+            <table class="census-table">
+              <thead><tr><th class="c-name">ชื่อ-สกุล</th><th class="c-id">เลขบัตรประชาชน</th><th class="c-dob">วัน/เดือน/ปีเกิด</th><th class="c-age">อายุ</th><th class="c-tel">เบอร์โทร</th></tr></thead>
+              <tbody>
+                @for(person of store.householdMembers(house.id);track person.id){
+                  <tr><td class="c-name">{{ person.title }}{{ person.firstName }} {{ person.lastName }}</td><td class="c-id">{{ person.nationalId }}</td><td class="c-dob">{{ preferences.formatShortThaiDate(person.dateOfBirth) }}</td><td class="c-age">{{ preferences.ageOnToday(person.dateOfBirth) }}</td><td class="c-tel">{{ person.phone }}</td></tr>
+                }
+                @empty { <tr><td colspan="5" class="c-empty">ยังไม่มีสมาชิกในครัวเรือนนี้</td></tr> }
+              </tbody>
+            </table>
+          </div>
+        }
+      </div>
+    </section>
+  </div>
+</section>

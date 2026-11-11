@@ -1,0 +1,14 @@
+<div class="dialog-scrim" (click)="cancelled.emit()">
+  <div class="dialog-card" role="dialog" aria-modal="true" aria-labelledby="dialog-title" aria-describedby="dialog-message" (click)="$event.stopPropagation()">
+    <div class="dialog-icon" aria-hidden="true">!</div>
+    <h2 id="dialog-title">{{ data().title }}</h2>
+    <p id="dialog-message">{{ data().message }}</p>
+    @if (data().detail) {
+      <p class="dialog-detail">{{ data().detail }}</p>
+    }
+    <div class="dialog-actions">
+      <button #cancelButton type="button" class="button button-secondary" (click)="cancelled.emit()">{{ data().cancelLabel }}</button>
+      <button type="button" class="button button-danger" (click)="confirmed.emit()">{{ data().confirmLabel }}</button>
+    </div>
+  </div>
+</div>
