@@ -5,9 +5,9 @@
       <label class="field"><span>ขอบเขตข้อมูล</span><select [value]="selected()" (change)="selected.set($any($event.target).value)"><option value="all">ครัวเรือนทั้งหมด ({{store.households().length}} ครัวเรือน)</option>@for(house of store.households();track house.id){<option [value]="house.id">บ้านเลขที่ {{house.houseNumber}} · {{house.householdCode}}</option>}</select></label>
       <div class="print-option-card"><span class="check-mark">✓</span><div><strong>ตารางสมาชิกครัวเรือน</strong><small>ชื่อ-สกุล เลขบัตรประชาชน วันเกิด อายุ เบอร์โทร</small></div></div>
       <p class="print-doc-hint">หัวเอกสารใช้ข้อมูลพื้นที่จากหน้า “ตั้งค่า” (หมู่ ตำบล อำเภอ จังหวัด ประจำปี และชื่อผู้ดูแล) — เรียงบ้านเลขที่จากน้อยไปมากอัตโนมัติ</p>
-      <button class="button button-primary print-button" (click)="print()">▤ <span>พิมพ์เอกสาร A4</span></button>
-      <button class="button button-secondary print-button" (click)="savePdf()">⬇ <span>บันทึกเป็น PDF</span></button>
-      <p class="print-hint">พิมพ์: ตั้งค่ากระดาษ A4 แนวตั้ง · บันทึก PDF: ในหน้าต่างพิมพ์เลือกปลายทาง “บันทึกเป็น PDF” แล้วกด บันทึก — การพิมพ์ไม่เปลี่ยนแปลงข้อมูล</p>
+      <button class="button button-primary print-button" type="button" (click)="print()">▤ <span>พิมพ์ / บันทึก PDF</span></button>
+      <p class="print-hint">เปิดหน้าพิมพ์ของอุปกรณ์ แล้วเลือกเครื่องพิมพ์หรือ “บันทึกเป็น PDF”</p>
+      <div class="print-mobile-help" aria-label="วิธีพิมพ์จากมือถือ"><strong>วิธีพิมพ์จากมือถือ</strong><ol><li>แตะ “พิมพ์ / บันทึก PDF”</li><li>เลือกเครื่องพิมพ์ หรือเลือก “บันทึกเป็น PDF”</li><li>ตรวจขนาดกระดาษ A4 แล้วแตะพิมพ์หรือบันทึก</li></ol><p>ถ้าหน้าพิมพ์ไม่เปิด ให้ใช้เมนูแชร์ของเบราว์เซอร์ แล้วเลือกพิมพ์</p></div>
     </section>
     <section class="panel preview-panel"><div class="preview-head"><div><span class="eyebrow">ตัวอย่างเอกสาร</span><strong>กระดาษ A4</strong></div><span class="paper-badge">A4</span></div>
       <div class="paper-preview census-doc">
@@ -19,6 +19,7 @@
           <div class="doc-house-block">
             <div class="doc-house-label">บ้านเลขที่ {{ house.houseNumber }} <span>รหัสประจำบ้าน {{ house.householdCode }}</span></div>
             <table class="census-table">
+              <colgroup><col><col><col><col><col></colgroup>
               <thead><tr><th class="c-name">ชื่อ-สกุล</th><th class="c-id">เลขบัตรประชาชน</th><th class="c-dob">วัน/เดือน/ปีเกิด</th><th class="c-age">อายุ</th><th class="c-tel">เบอร์โทร</th></tr></thead>
               <tbody>
                 @for(person of store.householdMembers(house.id);track person.id){
@@ -27,6 +28,19 @@
                 @empty { <tr><td colspan="5" class="c-empty">ยังไม่มีสมาชิกในครัวเรือนนี้</td></tr> }
               </tbody>
             </table>
+            <div class="mobile-census-list">
+              @for(person of store.householdMembers(house.id);track person.id){
+                <article class="mobile-census-card">
+                  <strong>{{ person.title }}{{ person.firstName }} {{ person.lastName }}</strong>
+                  <div class="mobile-census-facts">
+                    <span><small>เลขบัตรประชาชน</small>{{ person.nationalId || '—' }}</span>
+                    <span><small>วันเกิด</small>{{ preferences.birthDisplay(person.dateOfBirth, person.birthYearOnly) }}</span>
+                    <span><small>อายุ</small>{{ person.dateOfBirth ? preferences.ageOnToday(person.dateOfBirth) + ' ปี' : '—' }}</span>
+                    <span><small>เบอร์โทร</small>{{ person.phone || '—' }}</span>
+                  </div>
+                </article>
+              } @empty { <p class="mobile-census-empty">ยังไม่มีสมาชิกในครัวเรือนนี้</p> }
+            </div>
           </div>
         }
       </div>

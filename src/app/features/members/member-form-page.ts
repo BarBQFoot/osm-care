@@ -15,6 +15,7 @@ export class MemberFormPage {
   protected readonly editing = !!this.memberId;
   protected submitted = false;
   protected readonly saveFailed = signal(false);
+  protected readonly saving = signal(false);
   protected readonly household = computed(() => this.store.household(this.householdId));
   protected readonly form = this.fb.nonNullable.group({
     title: [''], firstName: ['', Validators.required], lastName: ['', Validators.required],
@@ -41,6 +42,8 @@ export class MemberFormPage {
     return control.invalid && (control.touched || this.submitted);
   }
 
+  protected preventDateSubmit(event: Event): void { event.preventDefault(); }
+
   protected toggleYearOnly(): void {
     const on = !this.form.controls.birthYearOnly.value;
     this.form.controls.birthYearOnly.setValue(on);
@@ -54,6 +57,7 @@ export class MemberFormPage {
   }
 
   protected async save(): Promise<void> {
+    if (this.saving()) return;
     this.submitted = true;
     this.saveFailed.set(false);
     this.form.controls.birthYearBE.markAsTouched();
@@ -73,8 +77,15 @@ export class MemberFormPage {
       value.dateOfBirth = `${be - 543}-01-01`;
     }
     const { birthYearBE: _unused, ...payload } = value;
-    const id = await this.store.saveMember({ ...payload, householdId: this.householdId }, this.memberId ?? undefined);
-    if (!id) { this.saveFailed.set(true); return; }
-    void this.router.navigate(['/households', this.householdId, 'members', id], { queryParams: { saved: 1 } });
+    this.saving.set(true);
+    try {
+      const id = await this.store.saveMember({ ...payload, householdId: this.householdId }, this.memberId ?? undefined);
+      if (!id) { this.saveFailed.set(true); return; }
+      void this.router.navigate(['/households', this.householdId, 'members', id], { queryParams: { saved: 1 } });
+    } catch {
+      this.saveFailed.set(true);
+    } finally {
+      this.saving.set(false);
+    }
   }
 }

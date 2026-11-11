@@ -102,7 +102,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .result-count strong { color: #1d2b1c; font-size: 17px; }
 .search-hint { margin: 0 3px 16px; color: #55624f; font-size: 15px; }
 .table-panel { overflow: hidden; }
-.desktop-table table { width: 100%; border-collapse: collapse; text-align: left; }
+.desktop-table table { width: 100%; table-layout: fixed; border-collapse: collapse; text-align: left; }
+.desktop-table th, .desktop-table td { width: 25%; }
 .desktop-table th { padding: 14px 18px; background: #f6f9f5; color: #55624f; font-size: 14px; font-weight: 700; }
 .desktop-table td { padding: 14px 18px; border-top: 1px solid #eef2ed; color: #3d4a40; font-size: 16px; }
 .desktop-table tr:hover td { background: #fafcf9; }
@@ -174,14 +175,15 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .profile-icon { background: #e8f2fa; color: #1b6fa8; }
 .form-section-heading h2 { margin: 0; color: #1d2b1c; font-size: 18px; }
 .form-section-heading p { margin: 4px 0 0; color: #6d7a6e; font-size: 14px; }
-.form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 18px; }
+.form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 18px; min-width: 0; }
 .three-col { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-.field { display: grid; align-content: start; gap: 7px; color: #3d4a40; font-size: 15px; font-weight: 650; }
+.field { display: grid; align-content: start; gap: 7px; min-width: 0; width: 100%; color: #3d4a40; font-size: 15px; font-weight: 650; }
 .field > span b { color: #a0291d; font-weight: 650; }
-.field input, .field select { width: 100%; min-height: 56px; padding: 10px 14px; border: 2px solid #d5dfd4; border-radius: 12px; outline: 0; background: #fff; color: #22301f; font-size: 18px; font-weight: 450; transition: border-color .15s, box-shadow .15s; }
+.field input, .field select { display: block; width: 100%; min-width: 0; max-width: 100%; min-height: 56px; padding: 10px 14px; border: 2px solid #d5dfd4; border-radius: 12px; outline: 0; background: #fff; color: #22301f; font-size: 18px; font-weight: 450; transition: border-color .15s, box-shadow .15s; }
 .field input:focus, .field select:focus { border-color: #12753c; box-shadow: 0 0 0 3px #12753c1c; }
 .field input::placeholder { color: #9aa79c; }
 .field-error { color: #a0291d; font-size: 15px; font-weight: 550; }
+.field-help { color: #55624f; font-size: 14px; font-weight: 450; line-height: 1.5; }
 .form-footer { display: flex; justify-content: flex-end; gap: 12px; margin-top: 22px; padding-top: 18px; border-top: 1px solid #e9eee9; }
 .form-tip { margin-top: 11px; }
 .second-section { margin-top: 22px; padding-top: 18px; border-top: 1px solid #e9eee9; }
@@ -201,6 +203,11 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .print-option-card small { color: #6d7a6e; font-size: 13px; }
 .print-button { width: 100%; margin-top: 18px; }
 .print-hint { margin: 10px 0 0; text-align: center; color: #55624f; font-size: 14px; }
+.print-mobile-help { display: none; margin-top: 16px; padding: 15px 14px; border: 1px solid #dbe4da; border-radius: 12px; background: #f7faf7; }
+.print-mobile-help strong { color: #22301f; font-size: 16px; }
+.print-mobile-help ol { margin: 8px 0; padding-left: 24px; color: #3d4a40; font-size: 15px; line-height: 1.75; }
+.print-mobile-help p { margin: 0; color: #55624f; font-size: 14px; line-height: 1.6; }
+@media (max-width: 760px) { .print-mobile-help { display: block; } }
 .preview-panel { padding: 17px; background: #fff; overflow-x: auto; }
 .preview-head { display: flex; align-items: center; justify-content: space-between; padding: 0 2px 14px; }
 .preview-head > div { display: grid; gap: 3px; }
@@ -214,12 +221,14 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .doc-house-block { margin-top: 18px; }
 .doc-house-label { margin-bottom: 8px; color: #1d2b1c; font-size: 24px; font-weight: 700; }
 .doc-house-label span { color: #1d2b1c; font-weight: 700; }
-.census-table { width: 100%; border-collapse: collapse; }
-.census-table th, .census-table td { border: 1px solid #3f4441; padding: 4px 10px; text-align: left; color: #1d2b1c; font-size: 24px; font-weight: 500; white-space: nowrap; }
+.census-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+.census-table col { width: 20%; }
+.census-table th, .census-table td { width: 20%; border: 1px solid #3f4441; padding: 4px 6px; text-align: left; color: #1d2b1c; font-size: 24px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .census-table th { background: #fff; font-weight: 700; }
 .census-table .c-id { font-variant-numeric: tabular-nums; }
 .census-table .c-tel { font-variant-numeric: tabular-nums; }
 .census-table .c-empty { color: #8a958c; padding: 10px; }
+.mobile-census-list { display: none; }
 .print-doc-hint { margin: 12px 0 0; color: #55624f; font-size: 13px; line-height: 1.6; }
 
 /* ================= ตั้งค่า ================= */
@@ -235,6 +244,9 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .toggle-on { background: #12753c; }
 .toggle-on span { transform: translateX(24px); }
 .settings-name { max-width: 400px; padding-top: 3px; }
+.member-form .year-only-toggle { margin: 8px 0 2px; padding: 14px 0 0; border-top: 1px solid #eef2ed; }
+.member-form .year-only-toggle strong { font-size: 16px; }
+.member-form .year-only-toggle small { font-size: 13px; }
 .settings-note { padding: 0 3px; }
 
 /* ================= ไม่พบหน้า ================= */
@@ -316,14 +328,24 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   .member-hero-info { min-width: calc(100% - 72px); }
   .member-hero .title-actions { width: 100%; margin-top: 4px; }
   .info-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); padding-inline: 13px; }
-  .form-card { padding: 18px 16px 0; }
+  .form-card { min-width: 0; padding: 18px 16px 16px; }
   .form-grid, .three-col { grid-template-columns: 1fr; gap: 14px; }
+  .form-grid > *, .field { min-width: 0; }
   .form-section-heading { margin-bottom: 14px; }
-  .form-footer { position: fixed; left: 0; right: 0; bottom: calc(75px + env(safe-area-inset-bottom)); z-index: 20; justify-content: stretch; gap: 12px; padding: 12px 16px; background: #fff; border-top: 1px solid #e9eee9; }
-  .form-footer .button { flex: 1; padding-inline: 10px; }
-  .form-card { margin-bottom: 108px; }
+  .form-footer { position: static; display: grid; grid-template-columns: 1fr; gap: 10px; margin: 22px -16px 0; padding: 15px 16px 0; border-top: 1px solid #e9eee9; background: transparent; }
+  .form-footer .button { width: 100%; min-width: 0; min-height: 60px; padding: 9px 12px; white-space: normal; }
+  .form-card { margin-bottom: 0; }
+  .field-help { font-size: 14px; }
   .form-tip { margin-top: 14px; padding-bottom: 18px; }
   .print-layout { grid-template-columns: 1fr; }
+  .mobile-census-list { display: grid; gap: 10px; }
+  .census-table { display: none; }
+  .mobile-census-card { padding: 13px; border: 1px solid #dbe4da; border-radius: 10px; background: #fff; }
+  .mobile-census-card > strong { display: block; margin-bottom: 10px; color: #1d2b1c; font-size: 17px; line-height: 1.5; overflow-wrap: anywhere; }
+  .mobile-census-facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px 12px; }
+  .mobile-census-facts > span { display: grid; gap: 3px; min-width: 0; color: #25332a; font-size: 15px; overflow-wrap: anywhere; }
+  .mobile-census-facts small { color: #66736a; font-size: 13px; }
+  .mobile-census-empty { margin: 0; padding: 12px; color: #55624f; font-size: 15px; }
   .paper-preview { min-height: 380px; padding: 24px 20px; }
   .print-options { padding: 17px; }
   .settings-card { padding: 17px; }
@@ -341,8 +363,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   .route-content { min-height: 0 !important; }
   .page-wrap { width: 100% !important; max-width: none !important; margin: 0 !important; padding: 0 !important; }
   .print-layout { display: block !important; }
-  .preview-panel { padding: 0 !important; border: 0 !important; box-shadow: none !important; }
+  .preview-panel { overflow: visible !important; padding: 0 !important; border: 0 !important; box-shadow: none !important; }
   .paper-preview { min-height: 0 !important; padding: 0 !important; border: 0 !important; box-shadow: none !important; }
+  .census-table { display: table !important; }
+  .mobile-census-list { display: none !important; }
   .census-doc { font-family: 'TH Sarabun New', Sarabun, sans-serif; }
   .doc-house-block { break-inside: avoid; page-break-inside: avoid; }
   .census-table { break-inside: avoid; page-break-inside: avoid; }
@@ -350,9 +374,9 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   .doc-title { font-size: 24pt; font-weight: 700; }
   .doc-line, .doc-name { font-size: 18pt; font-weight: 700; }
   .doc-house-label { font-size: 18pt; font-weight: 700; }
-  .census-table th, .census-table td { font-size: 18pt; padding: 2px 8px; font-weight: 500; }
+  .census-table col { width: 20% !important; }
+  .census-table th, .census-table td { width: 20% !important; font-size: 11pt; padding: 2px 4px; font-weight: 500; white-space: normal; overflow: visible; overflow-wrap: anywhere; text-overflow: clip; }
   .census-table th { font-weight: 700; }
-  .census-table .c-age { width: 64px; }
 }
 
 /* ================= ล็อกอิน ================= */

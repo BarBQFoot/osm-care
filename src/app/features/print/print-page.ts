@@ -25,5 +25,4 @@ export class PrintPage {
     });
   });
   protected print(): void { window.print(); }
-  protected savePdf(): void { window.print(); }
 }
