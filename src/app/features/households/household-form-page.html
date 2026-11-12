@@ -1,4 +1,4 @@
-<section class="page-wrap form-page">
+<section class="page-wrap form-page theme-households">
   <div class="breadcrumb"><a routerLink="/households">ครัวเรือน</a><span>›</span><span>{{ editing ? 'แก้ไขครัวเรือน' : 'เพิ่มครัวเรือน' }}</span></div>
   <div class="page-title-row"><div><div class="eyebrow">ข้อมูลครัวเรือน</div><h1>{{ editing ? 'แก้ไขครัวเรือน' : 'เพิ่มครัวเรือน' }}</h1><p class="page-subtitle">กรอกข้อมูลพื้นฐานของบ้านในพื้นที่รับผิดชอบ</p></div></div>
   <form class="panel form-card" #formEl [formGroup]="form" (ngSubmit)="save()">

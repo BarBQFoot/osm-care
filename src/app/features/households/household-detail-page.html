@@ -1,5 +1,5 @@
 @if (household(); as house) {
-  <section class="page-wrap">
+  <section class="page-wrap theme-households">
     <a class="button button-secondary back-top" routerLink="/households">← กลับไปหน้าครัวเรือน</a>
     @if (justSaved) { <div class="save-banner" role="status" aria-live="polite"><span>✓</span> บันทึกข้อมูลแล้ว</div> }
     <div class="breadcrumb"><a routerLink="/households">ครัวเรือน</a><span>›</span><span>บ้านเลขที่ {{ house.houseNumber }}</span></div>

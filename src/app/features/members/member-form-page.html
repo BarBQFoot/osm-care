@@ -1,5 +1,5 @@
 @if (household(); as house) {
-  <section class="page-wrap form-page">
+  <section class="page-wrap form-page theme-members">
     <div class="breadcrumb"><a routerLink="/households">ครัวเรือน</a><span>›</span><a [routerLink]="['/households', house.id]">บ้านเลขที่ {{ house.houseNumber }}</a><span>›</span><span>{{ editing ? 'แก้ไขสมาชิก' : 'เพิ่มสมาชิก' }}</span></div>
     <div class="page-title-row"><div><div class="eyebrow">สมาชิกในครัวเรือน</div><h1>{{ editing ? 'แก้ไขข้อมูลสมาชิก' : 'เพิ่มสมาชิก' }}</h1><p class="page-subtitle">บ้านเลขที่ {{ house.houseNumber }} <span class="code-pill">{{ house.householdCode }}</span></p></div></div>
     <form class="panel form-card member-form" #formEl [formGroup]="form" (ngSubmit)="save()">

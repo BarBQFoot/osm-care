@@ -1,4 +1,4 @@
-<section class="page-wrap">
+<section class="page-wrap theme-households">
   <div class="page-title-row"><div><div class="eyebrow">สมุดบันทึกชุมชน</div><h1>ครัวเรือน</h1><p class="page-subtitle">จัดการข้อมูลครัวเรือนและสมาชิกในพื้นที่รับผิดชอบ</p></div><a class="button button-primary" routerLink="/households/new"><span>＋</span> เพิ่มครัวเรือน</a></div>
   <div class="list-toolbar"><label class="search-box"><span aria-hidden="true">⌕</span><input aria-label="ค้นหาครัวเรือน" placeholder="พิมพ์บ้านเลขที่ เช่น 12/1 หรือรหัสประจำบ้าน" [value]="query()" (input)="query.set($any($event.target).value)">@if(query()){<button class="clear-search" (click)="query.set('')">ล้างคำค้น</button>}</label><span class="result-count">ทั้งหมด <strong>{{ filtered().length }}</strong> ครัวเรือน</span></div>
   <p class="search-hint">พิมพ์บ้านเลขที่หรือรหัสประจำบ้านเพื่อค้นหา แล้วแตะรายการเพื่อเปิดดูสมาชิก</p>
