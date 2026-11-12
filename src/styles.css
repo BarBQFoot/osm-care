@@ -200,7 +200,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .member-hero h1 { font-size: 25px; }
 .member-hero-info p { margin: 6px 0 0; color: var(--muted); font-size: 16px; }
 .member-hero-info p span { padding: 0 6px; color: #aebbad; }
-.info-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; padding: 16px 18px; }
+.info-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; padding: 16px 18px; }
+.info-item:first-child { grid-column: span 2; }
 .info-item { display: grid; gap: 7px; padding: 15px; border: 2px solid #e0e9de; border-top: 5px solid var(--info-accent, var(--brand)); border-radius: 12px; background: var(--info-bg, #f7fbf7); }
 .info-item:nth-child(1) { --info-accent: var(--brand); --info-bg: #f2f9f3; }
 .info-item:nth-child(2) { --info-accent: var(--blue); --info-bg: #f0f7fd; }
@@ -208,7 +209,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .info-item:nth-child(4) { --info-accent: var(--violet); --info-bg: #f6f2fe; }
 .info-item:nth-child(5) { --info-accent: var(--teal); --info-bg: #eefaf9; }
 .info-item span { color: var(--muted); font-size: 14px; font-weight: 650; }
-.info-item strong { color: var(--ink); font-size: 18px; font-weight: 650; overflow-wrap: anywhere; }
+.info-item strong { color: var(--ink); font-size: 18px; font-weight: 650; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.info-item:nth-child(2) strong { font-variant-numeric: tabular-nums; }
 .back-link { display: inline-flex; align-items: center; gap: 10px; margin-top: 20px; padding: 13px 20px; border: 2px solid #b7cbb7; border-radius: 14px; background: #fff; color: var(--accent, #0e6b37); text-decoration: none; font-size: 17px; font-weight: 700; }
 .back-link:hover { background: #f2f8f1; }
 .back-top { margin-bottom: 17px; color: var(--accent, #0e6b37); }
@@ -383,6 +385,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   .member-hero-info { min-width: calc(100% - 78px); }
   .member-hero .title-actions { width: 100%; margin-top: 5px; }
   .info-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 12px; }
+  .info-item:nth-child(2), .info-item:nth-child(5) { grid-column: span 2; }
   .info-item { padding: 13px; }
   .info-item strong { font-size: 17px; }
   .form-card { min-width: 0; padding: 18px 16px 16px; }

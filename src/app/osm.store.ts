@@ -30,6 +30,16 @@ interface MemberRow {
   phone: string; occupation: string; note: string;
 }
 
+export function compareHouseNumber(a: string, b: string): number {
+  const pa = a.split('/').map((part) => Number.parseInt(part, 10) || 0);
+  const pb = b.split('/').map((part) => Number.parseInt(part, 10) || 0);
+  for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
+    const diff = (pa[i] ?? 0) - (pb[i] ?? 0);
+    if (diff) return diff;
+  }
+  return a.localeCompare(b, 'th');
+}
+
 const SEED_HOUSES: { houseNumber: string; householdCode: string }[] = [
   { houseNumber: '12/1', householdCode: 'ชุมชน-001' },
   { houseNumber: '14', householdCode: 'ชุมชน-002' },
@@ -93,7 +103,7 @@ export class OSMStore {
       houses = await this.seed();
     }
     if (!houses) return;
-    this.households.set(houses);
+    this.households.set([...houses].sort((a, b) => compareHouseNumber(a.houseNumber, b.houseNumber)));
     const { data, error } = await this.client.from('members').select('*');
     if (error) { this.fail('โหลดรายชื่อสมาชิกไม่สำเร็จ', error.message); return; }
     this.members.set((data as MemberRow[]).map((row) => this.toMember(row)));
@@ -153,13 +163,13 @@ export class OSMStore {
     if (id) {
       const { error } = await this.client.from('households').update(this.toHouseRow(value)).eq('id', id);
       if (error) { this.fail('บันทึกครัวเรือนไม่สำเร็จ', error.message); return id; }
-      this.households.update((items) => items.map((item) => item.id === id ? { ...item, ...value } : item));
+      this.households.update((items) => items.map((item) => item.id === id ? { ...item, ...value } : item).sort((a, b) => compareHouseNumber(a.houseNumber, b.houseNumber)));
       return id;
     }
     const { data, error } = await this.client.from('households').insert(this.toHouseRow(value)).select().single();
     if (error || !data) { this.fail('เพิ่มครัวเรือนไม่สำเร็จ', error?.message ?? ''); return ''; }
     const house = this.toHousehold(data as HouseholdRow);
-    this.households.update((items) => [...items, house]);
+    this.households.update((items) => [...items, house].sort((a, b) => compareHouseNumber(a.houseNumber, b.houseNumber)));
     return house.id;
   }
 
