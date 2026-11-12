@@ -16,11 +16,20 @@ export class MemberFormPage {
   protected submitted = false;
   protected readonly saveFailed = signal(false);
   protected readonly saving = signal(false);
+  protected readonly birthDateError = signal(false);
   protected readonly household = computed(() => this.store.household(this.householdId));
+  protected readonly dayOptions = Array.from({ length: 31 }, (_, i) => i + 1);
+  protected readonly monthOptions = [
+    { value: 1, label: 'ม.ค.' }, { value: 2, label: 'ก.พ.' }, { value: 3, label: 'มี.ค.' },
+    { value: 4, label: 'เม.ย.' }, { value: 5, label: 'พ.ค.' }, { value: 6, label: 'มิ.ย.' },
+    { value: 7, label: 'ก.ค.' }, { value: 8, label: 'ส.ค.' }, { value: 9, label: 'ก.ย.' },
+    { value: 10, label: 'ต.ค.' }, { value: 11, label: 'พ.ย.' }, { value: 12, label: 'ธ.ค.' },
+  ];
   protected readonly form = this.fb.nonNullable.group({
     title: [''], firstName: ['', Validators.required], lastName: ['', Validators.required],
     nationalId: [''], dateOfBirth: [''], gender: [''], relationship: [''], phone: [''],
     occupation: [''], note: [''], birthYearOnly: [false], birthYearBE: ['', [Validators.pattern(/^\d{4}$/)]],
+    birthDay: [''], birthMonth: [''], birthYear: [''],
   });
   private readonly formEl = viewChild.required<ElementRef<HTMLFormElement>>('formEl');
 
@@ -31,6 +40,7 @@ export class MemberFormPage {
       const member = this.store.member(this.memberId);
       if (member && !this.patched) {
         this.form.patchValue(member);
+        if (member.dateOfBirth) this.fillBirthDateParts(member.dateOfBirth);
         if (member.birthYearOnly && member.dateOfBirth) this.form.controls.birthYearBE.setValue(String(Number(member.dateOfBirth.slice(0, 4)) + 543));
         this.patched = true;
       }
@@ -42,17 +52,39 @@ export class MemberFormPage {
     return control.invalid && (control.touched || this.submitted);
   }
 
-  protected preventDateSubmit(event: Event): void { event.preventDefault(); }
+  private fillBirthDateParts(value: string): void {
+    const [year, month, day] = value.split('-').map(Number);
+    if (!year || !month || !day) return;
+    this.form.controls.birthDay.setValue(String(day));
+    this.form.controls.birthMonth.setValue(String(month));
+    this.form.controls.birthYear.setValue(String(year + 543));
+  }
+
+  private composeBirthDate(): string | null {
+    const day = Number(this.form.controls.birthDay.value);
+    const month = Number(this.form.controls.birthMonth.value);
+    const be = Number(this.form.controls.birthYear.value);
+    if (!day && !month && !be) return '';
+    if (!day || !month || !be || be < 2100 || be > 2600) return null;
+    const year = be - 543;
+    const date = new Date(year, month - 1, day);
+    if (date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day) return null;
+    return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+  }
 
   protected toggleYearOnly(): void {
     const on = !this.form.controls.birthYearOnly.value;
     this.form.controls.birthYearOnly.setValue(on);
     if (on) {
-      const dob = this.form.controls.dateOfBirth.value;
+      const dob = this.composeBirthDate();
       if (dob) this.form.controls.birthYearBE.setValue(String(Number(dob.slice(0, 4)) + 543));
     } else {
       const be = Number(this.form.controls.birthYearBE.value);
-      if (be >= 2100 && be <= 2600) this.form.controls.dateOfBirth.setValue(`${be - 543}-01-01`);
+      if (be >= 2100 && be <= 2600) {
+        this.form.controls.birthDay.setValue('1');
+        this.form.controls.birthMonth.setValue('1');
+        this.form.controls.birthYear.setValue(String(be));
+      }
     }
   }
 
@@ -60,6 +92,7 @@ export class MemberFormPage {
     if (this.saving()) return;
     this.submitted = true;
     this.saveFailed.set(false);
+    this.birthDateError.set(false);
     this.form.controls.birthYearBE.markAsTouched();
     if (this.form.controls.birthYearOnly.value) {
       const be = Number(this.form.controls.birthYearBE.value);
@@ -75,8 +108,16 @@ export class MemberFormPage {
     if (value.birthYearOnly) {
       const be = Number(value.birthYearBE);
       value.dateOfBirth = `${be - 543}-01-01`;
+    } else {
+      const dob = this.composeBirthDate();
+      if (dob === null) {
+        this.birthDateError.set(true);
+        this.formEl().nativeElement.querySelector<HTMLElement>('[formControlName="birthYear"]')?.focus();
+        return;
+      }
+      value.dateOfBirth = dob;
     }
-    const { birthYearBE: _unused, ...payload } = value;
+    const { birthYearBE: _b1, birthDay: _b2, birthMonth: _b3, birthYear: _b4, ...payload } = value;
     this.saving.set(true);
     try {
       const id = await this.store.saveMember({ ...payload, householdId: this.householdId }, this.memberId ?? undefined);

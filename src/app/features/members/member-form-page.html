@@ -14,7 +14,15 @@
         @if (form.controls.birthYearOnly.value) {
           <label class="field"><span>ปีเกิด (พ.ศ.)</span><input formControlName="birthYearBE" inputmode="numeric" maxlength="4" placeholder="เช่น 2508">@if(showError('birthYearBE')){<small class="field-error">กรอกปีเกิด 4 หลัก เช่น 2508</small>}</label>
         } @else {
-          <label class="field"><span>วัน/เดือน/ปีเกิด</span><input type="date" formControlName="dateOfBirth" autocomplete="bday" (keydown.enter)="preventDateSubmit($event)" aria-describedby="birth-date-help"><small id="birth-date-help" class="field-help">เลือกวันเกิดแล้วปิดปฏิทิน จากนั้นกดปุ่ม “บันทึกข้อมูล” แยกอีกครั้ง</small></label>
+          <div class="field birth-date-field">
+            <span>วัน/เดือน/ปีเกิด (พ.ศ.)</span>
+            <div class="birth-date-row">
+              <select formControlName="birthDay" aria-label="วันเกิด" (change)="birthDateError.set(false)"><option value="">วัน</option>@for (day of dayOptions; track day) {<option [value]="day">{{ day }}</option>}</select>
+              <select formControlName="birthMonth" aria-label="เดือนเกิด" (change)="birthDateError.set(false)"><option value="">เดือน</option>@for (month of monthOptions; track month.value) {<option [value]="month.value">{{ month.label }}</option>}</select>
+              <input formControlName="birthYear" inputmode="numeric" maxlength="4" placeholder="ปี พ.ศ." aria-label="ปีเกิด พ.ศ." (input)="birthDateError.set(false)">
+            </div>
+            @if (birthDateError()) {<small class="field-error">กรอกวัน เดือน และปีเกิด (พ.ศ.) ให้ถูกต้องและครบถ้วน</small>}
+          </div>
         }
         <label class="field"><span>เลขบัตรประชาชน</span><input formControlName="nationalId" inputmode="numeric" maxlength="13" placeholder="13 หลัก"></label>
         <label class="field"><span>เบอร์โทรศัพท์</span><input formControlName="phone" inputmode="tel" placeholder="0XX-XXX-XXXX"></label>

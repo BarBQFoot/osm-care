@@ -184,6 +184,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .field input::placeholder { color: #9aa79c; }
 .field-error { color: #a0291d; font-size: 15px; font-weight: 550; }
 .field-help { color: #55624f; font-size: 14px; font-weight: 450; line-height: 1.5; }
+.birth-date-row { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1fr) minmax(0, 1.1fr); gap: 8px; }
 .form-footer { display: flex; justify-content: flex-end; gap: 12px; margin-top: 22px; padding-top: 18px; border-top: 1px solid #e9eee9; }
 .form-tip { margin-top: 11px; }
 .second-section { margin-top: 22px; padding-top: 18px; border-top: 1px solid #e9eee9; }
